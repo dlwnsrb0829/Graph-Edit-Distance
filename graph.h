@@ -8,6 +8,8 @@ using namespace std;
 class graph{
 private:
     void DFS_use_recursion(int u, bool visited[]);
+    int get_label(int vertex);
+    bool is_edge(int vertex1, int vertex2);
     int ** adj_matrix;
     int * v_labels;
     int v_size;
@@ -31,8 +33,31 @@ public:
     void print_graph_num();
     void DFS_use_recursion();
     void DFS_use_stack();
+    int get_GED(graph g);
+    int get_v_size();
 };
 
+// set graph
+void graph :: set_edge(int vertex1, int vertex2, int edge_label){
+    this->adj_matrix[vertex1][vertex2] = edge_label;
+    this->adj_matrix[vertex2][vertex1] = edge_label;
+}
+
+void graph :: set_v_labels(int * v_labels){
+    this->v_labels = v_labels;
+}
+
+void graph :: set_graph_num(int graph_num){
+    this->graph_num = graph_num;
+}
+
+// get graph
+int graph :: get_v_size(){
+    return v_size;
+}
+
+
+// print graph
 void graph :: print_matrix(){
     for(int i = 0 ; i < v_size ; i++){
         for(int j = 0 ; j < v_size ; j++){
@@ -40,6 +65,7 @@ void graph :: print_matrix(){
         }
         cout << endl;
     }
+    cout << endl;
 }
 
 void graph :: print_vertex_label(){
@@ -52,6 +78,7 @@ void graph :: print_graph_num(){
     cout << "# " << this->graph_num << endl; 
 }
 
+// calculate dfs
 void graph :: DFS_use_recursion(){
     bool visited[v_size];
     memset(visited, false, sizeof(bool) * v_size);
@@ -99,15 +126,30 @@ void graph :: DFS_use_stack() {
     cout << "\nuse stack time : " << (double)(end - start) << "ms" << endl;
 }
 
-void graph :: set_edge(int vertex1, int vertex2, int edge_label){
-    this->adj_matrix[vertex1][vertex2] = edge_label;
-    this->adj_matrix[vertex2][vertex1] = edge_label;
+// calculate GED
+int graph :: get_GED(graph g){
+    int cost = 0;
+
+    int max_size = get_v_size() > g.get_v_size() ? get_v_size() : g.get_v_size();
+
+    for(int i = 0 ; i < max_size ; i++){
+        if(this->get_label(i) != g.get_label(i)){
+            cost++;
+        }
+    }
+
+    return cost;
 }
 
-void graph :: set_v_labels(int * v_labels){
-    this->v_labels = v_labels;
+int graph :: get_label(int vertex){
+    if(vertex <= v_size){
+        return v_labels[vertex];
+    }else{
+        return -1;
+    }
 }
 
-void graph :: set_graph_num(int graph_num){
-    this->graph_num = graph_num;
+bool graph :: is_edge(int vertex1, int vertex2){
+
+    return true;
 }
