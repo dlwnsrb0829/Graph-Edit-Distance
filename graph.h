@@ -8,8 +8,10 @@ using namespace std;
 class graph{
 private:
     void DFS_use_recursion(int u, bool visited[]);
-    int get_label(int vertex);
+    int get_vertex_label(int vertex);
+    int get_edge_label(int vertex1, int vertex2);
     bool is_edge(int vertex1, int vertex2);
+    int get_edge_cost(int max_size, graph g1, graph g2);
     int ** adj_matrix;
     int * v_labels;
     int v_size;
@@ -129,19 +131,46 @@ void graph :: DFS_use_stack() {
 // calculate GED
 int graph :: get_GED(graph g){
     int cost = 0;
-
     int max_size = get_v_size() > g.get_v_size() ? get_v_size() : g.get_v_size();
-
     for(int i = 0 ; i < max_size ; i++){
-        if(this->get_label(i) != g.get_label(i)){
+        if(this->get_vertex_label(i) != g.get_vertex_label(i)){
             cost++;
         }
     }
-
+    cost += this->v_size < g.v_size ? get_edge_cost(max_size, *(this), g) : get_edge_cost(max_size, g, *(this));
     return cost;
 }
 
-int graph :: get_label(int vertex){
+int graph :: get_edge_cost(int max_size, graph g1, graph g2){ // g1이 작은거
+    int cost = 0;
+
+    for(int i = 0 ; i < g1.v_size ; i++){
+        for(int j = i + 1 ; j < g1.v_size ; j++){
+            if(g1.get_edge_label(i, j) != 0 && g2.get_edge_label(i, j) != 0){
+                if(g1.get_edge_label(i, j) != g2.get_edge_label(i, j)){
+                    cost++;
+                }
+            }
+        }
+    }
+
+    for(int i = 1 ; i < max_size ; i++){
+        for(int j = i-1 ; j >= 0 ; j--){
+            if(i < g1.v_size){
+                if(g1.is_edge(i, j) ^ g2.is_edge(i, j)){
+                    cost++;
+                }
+            }else{
+                if(g2.is_edge(i, j)){
+                    cost++;
+                }
+            }
+        }
+    }
+    return cost;
+}
+
+int graph :: get_vertex_label(int vertex){
     if(vertex <= v_size){
         return v_labels[vertex];
     }else{
@@ -149,7 +178,14 @@ int graph :: get_label(int vertex){
     }
 }
 
-bool graph :: is_edge(int vertex1, int vertex2){
+int graph :: get_edge_label(int vertex1, int vertex2){
+    return adj_matrix[vertex1][vertex2];
+}
 
-    return true;
+bool graph :: is_edge(int vertex1, int vertex2){
+    if(adj_matrix[vertex1][vertex2] != 0){
+        return true;
+    }else{
+        return false;
+    }
 }
