@@ -13,7 +13,7 @@ int main(){
     g2.print_graph_num();
     g2.print_matrix();
 
-    cout << g1.get_GED(g2) << endl;
+    cout << g2.get_GED(g1) << endl;
 
     return 0;
 }
