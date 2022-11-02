@@ -154,7 +154,7 @@ int graph :: get_edge_cost(int max_size, graph g1, graph g2){ // g1이 작은거
                 if(g1.get_edge_label(i, j) != g2.get_edge_label(i, j)){
                     cout << "i = " << i << " | j = " << j << endl;
                     cout << "g1 = " << g1.get_edge_label(i, j) << endl;
-                    cout << "g2 = " << g2.get_edge_label(i, j) << endl << endl;
+                    cout << "g2 = " << g2.get_edge_label(i, j) << endl;
                     cout << endl;
                     cost++;
                 }
@@ -168,7 +168,7 @@ int graph :: get_edge_cost(int max_size, graph g1, graph g2){ // g1이 작은거
                 if(g1.is_edge(i, j) ^ g2.is_edge(i, j)){
                     cout << "i = " << i << " | j = " << j << endl;
                     cout << "g1 = " << g1.is_edge(i, j) << endl;
-                    cout << "g2 = " << g2.is_edge(i, j) << endl << endl;
+                    cout << "g2 = " << g2.is_edge(i, j) << endl;
                     cout << endl;
                     cost++;
                 }
@@ -176,7 +176,7 @@ int graph :: get_edge_cost(int max_size, graph g1, graph g2){ // g1이 작은거
                 if(g2.is_edge(i, j)){
                     cout << "i = " << i << " | j = " << j << endl;
                     cout << "g1 = None" << endl;
-                    cout << "g2 = " << g2.is_edge(i, j) << endl << endl;
+                    cout << "g2 = " << g2.is_edge(i, j) << endl;
                     cout << endl;
                     cost++;
                 }
