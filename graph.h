@@ -187,7 +187,7 @@ int graph :: get_edge_cost(int max_size, graph g1, graph g2){ // g1이 작은거
 }
 
 int graph :: get_vertex_label(int vertex){
-    if(vertex <= v_size){
+    if(vertex < v_size){
         return v_labels[vertex];
     }else{
         return -1;
