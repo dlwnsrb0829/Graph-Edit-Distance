@@ -13,7 +13,7 @@ int main(){
     g2.print_graph_num();
     g2.print_matrix();
 
-    cout << g2.get_GED(g1) << endl;
+    cout << g2.get_edit_cost(g1) << endl;
 
     return 0;
 }
