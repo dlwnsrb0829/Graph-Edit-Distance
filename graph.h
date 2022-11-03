@@ -132,12 +132,12 @@ void graph :: DFS_use_stack() {
 int graph :: get_GED(graph g){
     int cost = 0;
     int max_size = get_v_size() > g.get_v_size() ? get_v_size() : g.get_v_size();
-    cout << "vertex label cost" << endl;
+    // cout << "vertex label cost" << endl;
     for(int i = 0 ; i < max_size ; i++){
         if(this->get_vertex_label(i) != g.get_vertex_label(i)){
-            cout << "i = " << i << endl;
-            cout << "g1 = " << this->get_vertex_label(i) << endl;
-            cout << "g2 = " << g.get_vertex_label(i) << endl << endl;
+            // cout << "i = " << i << endl;
+            // cout << "g1 = " << this->get_vertex_label(i) << endl;
+            // cout << "g2 = " << g.get_vertex_label(i) << endl << endl;
             cost++;
         }
     }
@@ -147,42 +147,49 @@ int graph :: get_GED(graph g){
 
 int graph :: get_edge_cost(int max_size, graph g1, graph g2){ // g1이 작은거
     int cost = 0;
-    cout << "edge label cost" << endl;
-    for(int i = 0 ; i < g1.v_size ; i++){
-        for(int j = i + 1 ; j < g1.v_size ; j++){
-            if(g1.get_edge_label(i, j) != 0 && g2.get_edge_label(i, j) != 0){
-                if(g1.get_edge_label(i, j) != g2.get_edge_label(i, j)){
-                    cout << "i = " << i << " | j = " << j << endl;
-                    cout << "g1 = " << g1.get_edge_label(i, j) << endl;
-                    cout << "g2 = " << g2.get_edge_label(i, j) << endl;
-                    cout << endl;
-                    cost++;
-                }
-            }
+    // cout << "edge label cost" << endl;
+    // for(int i = 0 ; i < g1.v_size ; i++){
+    //     for(int j = i + 1 ; j < g1.v_size ; j++){
+    //         if(g1.get_edge_label(i, j) != 0 && g2.get_edge_label(i, j) != 0){
+    //             if(g1.get_edge_label(i, j) != g2.get_edge_label(i, j)){
+    //                 cout << "i = " << i << " | j = " << j << endl;
+    //                 cout << "g1 = " << g1.get_edge_label(i, j) << endl;
+    //                 cout << "g2 = " << g2.get_edge_label(i, j) << endl;
+    //                 cout << endl;
+    //                 cost++;
+    //             }
+    //         }
+    //     }
+    // }
+    // cout << "edge cost" << endl;
+    // for(int i = 1 ; i < max_size ; i++){
+    //     for(int j = i-1 ; j >= 0 ; j--){
+    //         if(i < g1.v_size){
+    //             if(g1.is_edge(i, j) ^ g2.is_edge(i, j)){
+    //                 cout << "i = " << i << " | j = " << j << endl;
+    //                 cout << "g1 = " << g1.is_edge(i, j) << endl;
+    //                 cout << "g2 = " << g2.is_edge(i, j) << endl;
+    //                 cout << endl;
+    //                 cost++;
+    //             }
+    //         }else{
+    //             if(g2.is_edge(i, j)){
+    //                 cout << "i = " << i << " | j = " << j << endl;
+    //                 cout << "g1 = None" << endl;
+    //                 cout << "g2 = " << g2.is_edge(i, j) << endl;
+    //                 cout << endl;
+    //                 cost++;
+    //             }
+    //         }
+    //     }
+    // }
+
+    for(int i = 0 ; i < max_size ; i++){
+        for(int j = i + 1 ; j < max_size ; j++){
+            cout << i << " " << j << endl;
         }
     }
-    cout << "edge cost" << endl;
-    for(int i = 1 ; i < max_size ; i++){
-        for(int j = i-1 ; j >= 0 ; j--){
-            if(i < g1.v_size){
-                if(g1.is_edge(i, j) ^ g2.is_edge(i, j)){
-                    cout << "i = " << i << " | j = " << j << endl;
-                    cout << "g1 = " << g1.is_edge(i, j) << endl;
-                    cout << "g2 = " << g2.is_edge(i, j) << endl;
-                    cout << endl;
-                    cost++;
-                }
-            }else{
-                if(g2.is_edge(i, j)){
-                    cout << "i = " << i << " | j = " << j << endl;
-                    cout << "g1 = None" << endl;
-                    cout << "g2 = " << g2.is_edge(i, j) << endl;
-                    cout << endl;
-                    cost++;
-                }
-            }
-        }
-    }
+
     return cost;
 }
 
@@ -195,7 +202,11 @@ int graph :: get_vertex_label(int vertex){
 }
 
 int graph :: get_edge_label(int vertex1, int vertex2){
-    return adj_matrix[vertex1][vertex2];
+    if(vertex1 < v_size || vertex2 < v_size){
+        return adj_matrix[vertex1][vertex2];
+    }else{
+        return -1;
+    }
 }
 
 bool graph :: is_edge(int vertex1, int vertex2){
