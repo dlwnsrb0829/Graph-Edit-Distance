@@ -8,8 +8,6 @@ using namespace std;
 class graph{
 private:
     void DFS_use_recursion(int u, bool visited[]);
-    int get_vertex_label(int vertex);
-    int get_edge_label(int vertex1, int vertex2);
     int ** adj_matrix;
     int * v_labels;
     int v_size;
@@ -33,8 +31,10 @@ public:
     void print_graph_num();
     void DFS_use_recursion();
     void DFS_use_stack();
-    int get_edit_cost(graph g);
+    // int get_edit_cost(graph g);
     int get_v_size();
+    int get_vertex_label(int vertex);
+    int get_edge_label(int vertex1, int vertex2);
 };
 
 // set graph
@@ -127,23 +127,23 @@ void graph :: DFS_use_stack() {
 }
 
 // calculate edit cost
-int graph :: get_edit_cost(graph g){
-    int cost = 0;
-    int max_size = get_v_size() > g.get_v_size() ? get_v_size() : g.get_v_size();
-    for(int i = 0 ; i < max_size ; i++){
-        if(this->get_vertex_label(i) != g.get_vertex_label(i)){
-            cost++;
-        }
-    }
-    for(int i = 1 ; i < max_size ; i++){
-        for(int j = i-1 ; j >= 0 ; j--){
-            if(this->get_edge_label(i, j) != g.get_edge_label(i, j)){
-                cost++;
-            }
-        }
-    }
-    return cost;
-}
+// int graph :: get_edit_cost(graph g){
+//     int cost = 0;
+//     int max_size = get_v_size() > g.get_v_size() ? get_v_size() : g.get_v_size();
+//     for(int i = 0 ; i < max_size ; i++){
+//         if(this->get_vertex_label(i) != g.get_vertex_label(i)){
+//             cost++;
+//         }
+//     }
+//     for(int i = 1 ; i < max_size ; i++){
+//         for(int j = i-1 ; j >= 0 ; j--){
+//             if(this->get_edge_label(i, j) != g.get_edge_label(i, j)){
+//                 cost++;
+//             }
+//         }
+//     }
+//     return cost;
+// }
 
 int graph :: get_vertex_label(int vertex){
     if(vertex < v_size){

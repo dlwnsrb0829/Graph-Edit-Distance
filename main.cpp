@@ -1,5 +1,6 @@
 #include<iostream>
 #include"dataSet.h"
+#include"GED.h"
 using namespace std;
 
 int main(){
@@ -13,7 +14,12 @@ int main(){
     g2.print_graph_num();
     g2.print_matrix();
 
-    cout << g2.get_edit_cost(g1) << endl;
+    GED ged = GED(g1, g2);
+
+    cout << g1.get_v_size() << " " << g2.get_v_size() << endl;
+    cout << ged.get_edit_cost() << endl;
+
+    // cout << g2.get_edit_cost(g1) << endl;
 
     return 0;
 }
