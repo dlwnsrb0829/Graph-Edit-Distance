@@ -33,7 +33,5 @@ int GED :: get_edit_cost(){
             }
         }
     }
-    mapping m;
-    m.test(4);
     return cost;
 }

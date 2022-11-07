@@ -3,35 +3,35 @@
 
 class mapping{
 private : 
-    int ** map;
-
+    bool *search_array;
+    int *index_array;
+    int size;
 public : 
     void test(int size);
-    mapping(){
-        map = new int*[2];
-        for(int i = 0 ; i < 2 ; i++){
-            map[i] = new int[4];
-            memset(map[i], 0, sizeof(int) * 4);
-        }
-        for(int i = 0 ; i < 4 ; i++){
-            map[0][i] = i;
-        }
+    mapping(int size){
+        search_array = new bool[size];
+        memset(search_array, false, sizeof(bool) * size);
+        index_array = new int[size];
+        memset(index_array, -1, sizeof(int) * size);
+        this->size = size;
     }
+    int* index_mapping(int index);
 
 };
 
 void mapping :: test(int size){
-    queue<int> q;
-    if(size == 0){
-        for(int i = 0 ; i < 4 ; i++){
-            cout << map[1][i] << " ";
+    
+}
+
+int* mapping :: index_mapping(int index){
+    if(index < size){
+        search_array[index] = true;
+        for(int i = 0 ; i < size ; i++){
+            if(index_array[i] == -1){
+                index_array[i] = index;
+                break;
+            }
         }
-        cout << endl;
-        return;
     }
-    for(int i = 0 ; i < size ; i++){
-        q.push(i);
-    }
-    test(size-1);
-    q.pop();
+    return index_array;
 }
