@@ -7,7 +7,6 @@ private :
     int *index_array;
     int size;
 public : 
-    void test(int size);
     mapping(int size){
         search_array = new bool[size];
         memset(search_array, false, sizeof(bool) * size);
@@ -19,13 +18,9 @@ public :
 
 };
 
-void mapping :: test(int size){
-    
-}
-
 int* mapping :: index_mapping(int index){
     if(index < size){
-        search_array[index] = true;
+        // search_array[index] = true;
         for(int i = 0 ; i < size ; i++){
             if(index_array[i] == -1){
                 index_array[i] = index;

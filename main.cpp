@@ -16,8 +16,9 @@ int main(){
 
     GED ged = GED(g1, g2);
 
-    cout << g1.get_v_size() << " " << g2.get_v_size() << endl;
+    // cout << g1.get_v_size() << " " << g2.get_v_size() << endl;
     cout << ged.get_edit_cost() << endl;
+    ged.test();
 
     // cout << g2.get_edit_cost(g1) << endl;
 
