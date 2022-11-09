@@ -10,7 +10,6 @@ private :
     bool *search_array;
     int *index_array;
     int max_size;
-    // bool is_min;
     int min_cost;
     int index_mapping(int index);
     int get_edit_cost();
@@ -27,34 +26,13 @@ public :
         memset(search_array, true, sizeof(bool) * max_size);
         index_array = new int[max_size];
         memset(index_array, -1, sizeof(int) * max_size);
-
-        // is_min = true;
         min_cost = -1;
     }
-    // int get_edit_cost();
-    // void test();
     int get_GED();
 };
 
-// int GED :: get_edit_cost(){
-//     int cost = 0;
-//     for(int i = 0 ; i < max_size ; i++){
-//         if(g1.get_vertex_label(i) != g2.get_vertex_label(i)){
-//             cost++;
-//         }
-//     }
-//     for(int i = 1 ; i < max_size ; i++){
-//         for(int j = i-1 ; j >= 0 ; j--){
-//             if(g1.get_edge_label(i, j) != g2.get_edge_label(i, j)){
-//                 cost++;
-//             }
-//         }
-//     }
-//     return cost;
-// }
-
 int GED :: index_mapping(int index){
-    int n=0;
+    int n = -1;
     if(index < max_size){
         search_array[index] = false;
         for(int i = 0 ; i < max_size ; i++){
@@ -67,26 +45,6 @@ int GED :: index_mapping(int index){
     }
     return n;
 }
-
-// void GED :: test(){
-//     queue<int> q;
-//     for(int i = 0 ; i < max_size ; i++){
-//         if(search_array[i]){
-//             q.push(i);
-//         }
-//     }
-//     while(!q.empty()){
-//         int temp = q.front();
-//         q.pop();
-//         int n = index_mapping(temp);
-//         print();
-//         cout << "-----" << endl;
-//         test();
-//         search_array[temp] = true;
-//         index_array[n] = -1;
-//     }
-    
-// }
 
 void GED :: print(){
     for(int i = 0 ; i < max_size ; i++){
@@ -128,14 +86,13 @@ void GED :: calculate_GED(){
         int temp = q.front();
         q.pop();
         int n = index_mapping(temp);
-        print();
+        // print();
         int cost = get_edit_cost();
-        cout << "cost : " << cost << endl;
+        // cout << "cost : " << cost << endl;
         if(index_array[max_size-1] != -1){
-            // is_min = false;
             min_cost = cost;
         }
-        cout << "---------------------" << endl;
+        // cout << "---------------------" << endl;
         if(min_cost != -1 && min_cost <= cost){
             search_array[temp] = true;
             index_array[n] = -1;
