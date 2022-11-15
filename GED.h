@@ -3,6 +3,20 @@
 
 using namespace std;
 
+struct Index
+{
+    int index_id;
+    int cost;
+    Index(int index_id, int cost){
+        this->index_id = index_id;
+        this->cost = cost;
+    }
+    bool operator<(const Index index) const {
+        return this->cost > index.cost;
+    }
+};
+
+
 class GED{
 private : 
     graph g1;
@@ -12,6 +26,8 @@ private :
     int max_size;
     int min_cost;
     int index_mapping(int index);
+    int index_unmapping(int index);
+    bool is_full_mapping();
     int get_edit_cost();
     void print();
     void calculate_GED();
@@ -46,6 +62,26 @@ int GED :: index_mapping(int index){
     return n;
 }
 
+int GED :: index_unmapping(int index){
+    search_array[index] = true;
+    for(int i = 0 ; i < max_size ; i++){
+        if(index_array[i] == index){
+            index_array[i] = -1;
+        }
+    }
+    return 0;
+}
+
+bool GED :: is_full_mapping(){
+    bool result = true;
+    for(int i = 0 ; i < max_size ; i++){
+        if(index_array[i] == -1){
+            result = false;
+        }
+    }
+    return result;
+}
+
 void GED :: print(){
     for(int i = 0 ; i < max_size ; i++){
         if(index_array[i] != -1){
@@ -75,32 +111,68 @@ int GED :: get_edit_cost(){
     return cost;
 }
 
+// void GED :: calculate_GED(){
+//     queue<int> q;
+//     for(int i = 0 ; i < max_size ; i++){
+//         if(search_array[i]){
+//             q.push(i);
+//         }
+//     }
+//     while(!q.empty()){
+//         int temp = q.front();
+//         q.pop();
+//         int n = index_mapping(temp);
+//         print();
+//         int cost = get_edit_cost();
+//         cout << "cost : " << cost << endl;
+//         if(index_array[max_size-1] != -1){
+//             min_cost = cost;
+//         }
+//         cout << "---------------------" << endl;
+//         if(min_cost != -1 && min_cost <= cost){
+//             search_array[temp] = true;
+//             index_array[n] = -1;
+//             return;
+//         }
+//         calculate_GED();
+//         search_array[temp] = true;
+//         index_array[n] = -1;
+//     }
+// }
+
 void GED :: calculate_GED(){
-    queue<int> q;
+    priority_queue<Index> q;
     for(int i = 0 ; i < max_size ; i++){
         if(search_array[i]){
-            q.push(i);
+            int a = index_mapping(i);
+            int temp_cost = get_edit_cost();
+            Index temp_index = Index(i, temp_cost);
+            index_unmapping(i);
+            q.push(temp_index);
         }
     }
     while(!q.empty()){
-        int temp = q.front();
+        Index temp = q.top();
         q.pop();
-        int n = index_mapping(temp);
+        int n = index_mapping(temp.index_id);
         // print();
-        int cost = get_edit_cost();
-        // cout << "cost : " << cost << endl;
-        if(index_array[max_size-1] != -1){
-            min_cost = cost;
+        // cout << "cost : " << temp.cost << endl;
+        if(is_full_mapping()){
+            if(min_cost == -1){
+                min_cost = temp.cost;
+            }else{
+                if(min_cost >= temp.cost){
+                    min_cost = temp.cost;
+                }
+            }
         }
         // cout << "---------------------" << endl;
-        if(min_cost != -1 && min_cost <= cost){
-            search_array[temp] = true;
-            index_array[n] = -1;
+        if(min_cost != -1 && min_cost <= temp.cost){
+            index_unmapping(temp.index_id);
             return;
         }
         calculate_GED();
-        search_array[temp] = true;
-        index_array[n] = -1;
+        index_unmapping(temp.index_id);
     }
 }
 

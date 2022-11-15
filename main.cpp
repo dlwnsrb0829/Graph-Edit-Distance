@@ -19,7 +19,7 @@ int main(){
     // cout << g1.get_v_size() << " " << g2.get_v_size() << endl;
     // cout << ged.get_edit_cost() << endl;
     // ged.test_GED();
-    cout << "GED : " << ged.get_GED() << endl;
+    cout << ged.get_GED() << endl;
 
     // cout << g2.get_edit_cost(g1) << endl;
 
