@@ -2,6 +2,7 @@
 #include<string>
 #include<stack>
 #include<ctime>
+// #include<set>
 
 using namespace std;
 
@@ -14,6 +15,8 @@ private:
     int v_size;
     int graph_num;
     int start, end;
+    multiset<int> v_set;
+    multiset<int> e_set;
 public:
     graph(){}
     graph(int v_size){
@@ -37,8 +40,13 @@ public:
     int get_v_size();
     int get_vertex_label(int vertex);
     int get_edge_label(int vertex1, int vertex2);
-
     void test();
+    void set_v_set(multiset<int> v_set);
+    void set_e_set(multiset<int> e_set);
+    multiset<int> get_v_set();
+    multiset<int> get_e_set();
+
+
 };
 
 // set graph
@@ -59,9 +67,25 @@ void graph :: set_graph_num(int graph_num){
     this->graph_num = graph_num;
 }
 
+void graph :: set_v_set(multiset<int> v_set){
+    this->v_set = v_set;
+}
+
+void graph :: set_e_set(multiset<int> e_set){
+    this->e_set = e_set;
+}
+
 // get graph
 int graph :: get_v_size(){
     return v_size;
+}
+
+multiset<int> graph :: get_v_set(){
+    return v_set;
+}
+
+multiset<int> graph :: get_e_set(){
+    return e_set;
 }
 
 

@@ -27,6 +27,10 @@ private :
     int max_size;
     int min_cost;
     int start, end;
+    multiset<int> g1_v_set;
+    multiset<int> g1_e_set;
+    multiset<int> g2_v_set;
+    multiset<int> g2_e_set;
     int index_mapping(int index);
     int index_unmapping(int index);
     bool is_full_mapping();
@@ -39,6 +43,14 @@ public :
         this->g1 = g1;
         this->g2 = g2;
         this->max_size = g1.get_v_size() > g2.get_v_size() ? g1.get_v_size() : g2.get_v_size();
+        this->g1_v_set = g1.get_v_set();
+        this->g1_e_set = g1.get_e_set();
+        this->g2_v_set = g2.get_v_set();
+        this->g2_e_set = g2.get_e_set();
+
+        // multiset<int> temp;
+        // set_intersection(g1_v_set.begin(), g1_v_set.end(), g2_v_set.begin(), g2_v_set.end(), inserter(temp, temp.begin()));
+        // cout << max_size-temp.size() << endl;
 
         search_array = new bool[max_size];
         memset(search_array, true, sizeof(bool) * max_size);
@@ -128,21 +140,64 @@ void GED :: calculate_GED(){
         Index index = q.top();
         q.pop();
         int n = index_mapping(index.index_id);
+        int a = *g1_v_set.find(g1.get_vertex_label(n));
+        int b = *g2_v_set.find(g2.get_vertex_label(index.index_id));
+        
+        if(n >= g1.get_v_size()){
+            g2_v_set.erase(index.index_id);
+        }else if(index.index_id >= g1.get_v_size()){
+            g1_v_set.erase(n);
+        }else{
+            g1_v_set.erase(n);
+            g2_v_set.erase(index.index_id);
+        }
+        // g1_v_set.erase(n);
+        // g2_v_set.erase(index.index_id);
+        // cout << "g1 : " << n << " | " << a << " " << "g2 : " << index.index_id << " | " << b << endl;
+        multiset<int> temp;
+        set_intersection(g1_v_set.begin(), g1_v_set.end(), g2_v_set.begin(), g2_v_set.end(), inserter(temp, temp.begin()));
+
+        int max = g1_v_set.size() > g2_v_set.size() ? g1_v_set.size() : g2_v_set.size();
+        int cost2 = max-temp.size();
+        // cout << cost2 << endl;
         if(index_array[max_size-1] != -1){
             if(min_cost == -1){
                 min_cost = index.cost;
+                // cout << min_cost << endl;
             }else{
                 if(min_cost >= index.cost){
                     min_cost = index.cost;
+                    // cout << min_cost << endl;
                 }
             }
         }
-        if(min_cost != -1 && min_cost <= index.cost){
+        if(min_cost != -1 && min_cost <= index.cost + cost2){
+            // cout << index.cost << " " << cost2 << endl;
             index_unmapping(index.index_id);
+
+            if(n >= g1.get_v_size()){
+                g2_v_set.insert(index.index_id);
+            }else if(index.index_id >= g1.get_v_size()){
+                g1_v_set.insert(n);
+            }else{
+                g1_v_set.insert(n);
+                g2_v_set.insert(index.index_id);
+            }
+
             return;
         }
         calculate_GED();
         index_unmapping(index.index_id);
+
+        if(n >= g1.get_v_size()){
+            g2_v_set.insert(index.index_id);
+        }else if(index.index_id >= g1.get_v_size()){
+            g1_v_set.insert(n);
+        }else{
+            g1_v_set.insert(n);
+            g2_v_set.insert(index.index_id);
+        }
+
     }
 }
 

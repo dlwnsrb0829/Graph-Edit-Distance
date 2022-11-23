@@ -5,6 +5,8 @@
 #include<string>
 #include<stack>
 #include<cstring>
+#include<set>
+#include<algorithm>
 #include"graph.h"
 
 using namespace std;
@@ -33,6 +35,8 @@ void dataSet :: read_file(){
     ifstream readFile;
     string v_label = "";
     int graph_num = 0;
+    multiset<int> v_set;
+    multiset<int> e_set;
     readFile.open(this->fileName);
     if(readFile.is_open()){
         char arr[256];
@@ -50,6 +54,7 @@ void dataSet :: read_file(){
                 case 'v':
                     split_vector = split(arr, ' ', "data");
                     v_label += to_string(split_vector[1]) + " ";
+                    v_set.insert(split_vector[1]);
                     v_size++;
                     break;
                 case 'e':
@@ -58,7 +63,7 @@ void dataSet :: read_file(){
                         split_vector = split(v_label, ' ', "");
                         int * v_labels = new int[v_size];
                         int * num_v_label = new int[v_size];
-                         memset(num_v_label, 0, sizeof(int) * v_size);
+                        memset(num_v_label, 0, sizeof(int) * v_size);
                         for(int i = 0 ; i < v_size ; i++){
                             v_labels[i] = split_vector[i];
                             num_v_label[split_vector[i]]++;
@@ -70,12 +75,15 @@ void dataSet :: read_file(){
                     }
                     split_vector = split(arr, ' ', "data");
                     g.set_edge(split_vector[0], split_vector[1], split_vector[2]);
+                    e_set.insert(split_vector[2]);
                     e_size++;
                     break;
                 default:
                     break;
             }
         }
+        g.set_v_set(v_set);
+        g.set_e_set(e_set);
     }
     readFile.close();
 }
