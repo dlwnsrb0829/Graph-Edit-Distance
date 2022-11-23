@@ -10,6 +10,7 @@ private:
     void DFS_use_recursion(int u, bool visited[]);
     int ** adj_matrix;
     int * v_labels;
+    int * num_v_label;
     int v_size;
     int graph_num;
     int start, end;
@@ -25,6 +26,7 @@ public:
     }
     void set_edge(int vertex1, int vertex2, int edge_label);
     void set_v_labels(int * v_labels);
+    void set_num_v_label(int * num_v_label);
     void set_graph_num(int graph_num);
     void print_matrix();
     void print_vertex_label();
@@ -35,6 +37,8 @@ public:
     int get_v_size();
     int get_vertex_label(int vertex);
     int get_edge_label(int vertex1, int vertex2);
+
+    void test();
 };
 
 // set graph
@@ -45,6 +49,10 @@ void graph :: set_edge(int vertex1, int vertex2, int edge_label){
 
 void graph :: set_v_labels(int * v_labels){
     this->v_labels = v_labels;
+}
+
+void graph :: set_num_v_label(int * num_v_label){
+    this->num_v_label = num_v_label;
 }
 
 void graph :: set_graph_num(int graph_num){
@@ -158,5 +166,11 @@ int graph :: get_edge_label(int vertex1, int vertex2){
         return adj_matrix[vertex1][vertex2];
     }else{
         return 0;
+    }
+}
+
+void graph :: test(){
+    for(int i = 0 ; i < v_size ; i++){
+        cout << "label : " << i << ", num : " << num_v_label[i] << endl;
     }
 }

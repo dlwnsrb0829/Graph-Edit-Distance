@@ -57,11 +57,15 @@ void dataSet :: read_file(){
                         this->is_first_edge = false;
                         split_vector = split(v_label, ' ', "");
                         int * v_labels = new int[v_size];
+                        int * num_v_label = new int[v_size];
+                         memset(num_v_label, 0, sizeof(int) * v_size);
                         for(int i = 0 ; i < v_size ; i++){
                             v_labels[i] = split_vector[i];
+                            num_v_label[split_vector[i]]++;
                         }
                         g = graph(v_size);
                         g.set_v_labels(v_labels);
+                        g.set_num_v_label(num_v_label);
                         g.set_graph_num(graph_num);
                     }
                     split_vector = split(arr, ' ', "data");

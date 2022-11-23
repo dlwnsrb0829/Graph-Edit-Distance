@@ -8,11 +8,13 @@ int main(){
     graph g1 = d.get_graph();
     g1.print_graph_num();
     g1.print_matrix();
+    g1.test();
 
     d = dataSet("Graph2");
     graph g2 = d.get_graph();
     g2.print_graph_num();
     g2.print_matrix();
+    g2.test();
 
     GED ged = GED(g1, g2);
 
