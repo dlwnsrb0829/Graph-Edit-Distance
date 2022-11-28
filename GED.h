@@ -27,39 +27,160 @@ private :
     int max_size;
     int min_cost;
     int start, end;
-    multiset<int> g1_v_set;
-    multiset<int> g1_e_set;
-    multiset<int> g2_v_set;
-    multiset<int> g2_e_set;
+    int * g1_vertex_set;
+    int * g1_edge_set;
+    int * g2_vertex_set;
+    int * g2_edge_set;
+    int * vertex_mapping;
+    int * edge_mapping;
+    int vertex_mapping_size;
+    int edge_mapping_size;
     int index_mapping(int index);
     int index_unmapping(int index);
     bool is_full_mapping();
     int get_edit_cost();
     void print();
     void calculate_GED();
+    void set_graph_set();
 
 public :
     GED(graph g1, graph g2){
         this->g1 = g1;
         this->g2 = g2;
         this->max_size = g1.get_v_size() > g2.get_v_size() ? g1.get_v_size() : g2.get_v_size();
-        this->g1_v_set = g1.get_v_set();
-        this->g1_e_set = g1.get_e_set();
-        this->g2_v_set = g2.get_v_set();
-        this->g2_e_set = g2.get_e_set();
-
-        // multiset<int> temp;
-        // set_intersection(g1_v_set.begin(), g1_v_set.end(), g2_v_set.begin(), g2_v_set.end(), inserter(temp, temp.begin()));
-        // cout << max_size-temp.size() << endl;
-
         search_array = new bool[max_size];
         memset(search_array, true, sizeof(bool) * max_size);
         index_array = new int[max_size];
         memset(index_array, -1, sizeof(int) * max_size);
         min_cost = -1;
+        set_graph_set();
     }
     int get_GED();
 };
+
+// void GED :: set_graph_set(){
+//     set<int> vertex_set_temp;
+//     set<int> edge_set_temp;
+//     set<int> vertex_mapping_set_temp;
+//     set<int> edge_mapping_set_temp;
+//     for(int i = 0 ; i < g1.vertex_set_size ; i++){
+//         // vertex_set_temp.insert(g1.vertex_set[i]);
+//         // cout << g1.vertex_set[i] << endl; 
+//         vertex_mapping_set_temp.insert(g1.vertex_set_mapping[i]);
+//     }
+//     for(int i = 0 ; i < g2.vertex_set_size ; i++){
+//         // vertex_set_temp.insert(g2.vertex_set[i]);
+//         // cout << g2.vertex_set[i] << endl; 
+//         vertex_mapping_set_temp.insert(g2.vertex_set_mapping[i]);
+//     }
+//     for(int i = 0 ; i < g1.edge_set_size ; i++){
+//         // edge_set_temp.insert(g1.edge_set[i]);
+//         edge_mapping_set_temp.insert(g1.edge_set_mapping[i]);
+//     }
+//     for(int i = 0 ; i < g2.edge_set_size ; i++){
+//         // edge_set_temp.insert(g2.edge_set[i]);
+//         edge_mapping_set_temp.insert(g2.edge_set_mapping[i]);
+//     }
+//     // vector<int> vertex_vector_temp;
+//     // vector<int> edge_vector_temp;
+//     vector<int> vertex_mapping_vector_temp;
+//     vector<int> edge_mapping_vector_temp;
+//     // copy(vertex_set_temp.begin(), vertex_set_temp.end(), back_inserter(vertex_vector_temp));
+//     // copy(edge_set_temp.begin(), edge_set_temp.end(), back_inserter(edge_vector_temp));
+//     copy(vertex_mapping_set_temp.begin(), vertex_mapping_set_temp.end(), back_inserter(vertex_mapping_vector_temp));
+//     copy(edge_mapping_set_temp.begin(), edge_mapping_set_temp.end(), back_inserter(edge_mapping_vector_temp));
+//     g1_vertex_set = new int[vertex_set_temp.size()];
+//     g1_edge_set = new int[edge_set_temp.size()];
+//     g2_vertex_set = new int[vertex_set_temp.size()];
+//     g2_edge_set = new int[edge_set_temp.size()];
+//     for(int i = 0 ; i < vertex_vector_temp.size() ; i++){
+//         for(int j = 0 ; j < g1.vertex_set_size ; j++){
+//             if(g1.vertex_set_mapping[j] == vertex_mapping_vector_temp[i]){
+//                 g1_vertex_set[i] = g1.vertex_set[j];
+//             }
+//         }
+//         for(int j = 0 ; j < g2.vertex_set_size ; j++){
+//             if(g2.vertex_set_mapping[j] == vertex_mapping_vector_temp[i]){
+//                 g2_vertex_set[i] = g2.vertex_set[j];
+//             }
+//         }
+//     }
+//     for(int i = 0 ; i < edge_vector_temp.size() ; i++){
+//         for(int j = 0 ; j < g1.edge_set_size ; j++){
+//             if(g1.edge_set_mapping[j] == edge_mapping_vector_temp[i]){
+//                 g1_edge_set[i] = g1.edge_set[j];
+//             }
+//         }
+//         for(int j = 0 ; j < g2.edge_set_size ; j++){
+//             if(g2.edge_set_mapping[j] == edge_mapping_vector_temp[i]){
+//                 g2_edge_set[i] = g2.edge_set[j];
+//             }
+//         }
+//     }
+//     for(int i = 0 ; i < vertex_set_temp.size() ; i++){
+//         cout << "g1 mapping : " << vertex_mapping_vector_temp[i] << ", num : " << g1_vertex_set[i] << endl;
+//         // cout << "g2 mapping : " << vertex_mapping_vector_temp[i] << ", num : " << g2_vertex_set[i] << endl;
+//     }
+// }
+
+void GED :: set_graph_set(){
+    set<int> vertex_set_temp;
+    set<int> edge_set_temp;
+    set<int> vertex_mapping_set_temp;
+    set<int> edge_mapping_set_temp;
+    for(int i = 0 ; i < g1.vertex_set_size ; i++){
+        vertex_mapping_set_temp.insert(g1.vertex_set_mapping[i]);
+    }
+    for(int i = 0 ; i < g2.vertex_set_size ; i++){
+        vertex_mapping_set_temp.insert(g2.vertex_set_mapping[i]);
+    }
+    for(int i = 0 ; i < g1.edge_set_size ; i++){
+        edge_mapping_set_temp.insert(g1.edge_set_mapping[i]);
+    }
+    for(int i = 0 ; i < g2.edge_set_size ; i++){
+        edge_mapping_set_temp.insert(g2.edge_set_mapping[i]);
+    }
+    vector<int> vertex_mapping_vector_temp;
+    vector<int> edge_mapping_vector_temp;
+    copy(vertex_mapping_set_temp.begin(), vertex_mapping_set_temp.end(), back_inserter(vertex_mapping_vector_temp));
+    copy(edge_mapping_set_temp.begin(), edge_mapping_set_temp.end(), back_inserter(edge_mapping_vector_temp));
+    vertex_mapping_size = vertex_mapping_set_temp.size();
+    edge_mapping_size = edge_mapping_set_temp.size();
+    g1_vertex_set = new int[vertex_mapping_size];
+    g1_edge_set = new int[edge_mapping_size];
+    g2_vertex_set = new int[vertex_mapping_size];
+    g2_edge_set = new int[edge_mapping_size];
+
+    memset(g1_vertex_set, 0, sizeof(int) * vertex_mapping_size);
+    memset(g2_vertex_set, 0, sizeof(int) * vertex_mapping_size);
+    memset(g1_edge_set, 0, sizeof(int) * edge_mapping_size);
+    memset(g2_edge_set, 0, sizeof(int) * edge_mapping_size);
+
+    for(int i = 0 ; i < vertex_mapping_size ; i++){
+        for(int j = 0 ; j < g1.vertex_set_size ; j++){
+            if(g1.vertex_set_mapping[j] == vertex_mapping_vector_temp[i]){
+                g1_vertex_set[i] = g1.vertex_set[j];
+            }
+        }
+        for(int j = 0 ; j < g2.vertex_set_size ; j++){
+            if(g2.vertex_set_mapping[j] == vertex_mapping_vector_temp[i]){
+                g2_vertex_set[i] = g2.vertex_set[j];
+            }
+        }
+    }
+    for(int i = 0 ; i < edge_mapping_size ; i++){
+        for(int j = 0 ; j < g1.edge_set_size ; j++){
+            if(g1.edge_set_mapping[j] == edge_mapping_vector_temp[i]){
+                g1_edge_set[i] = g1.edge_set[j];
+            }
+        }
+        for(int j = 0 ; j < g2.edge_set_size ; j++){
+            if(g2.edge_set_mapping[j] == edge_mapping_vector_temp[i]){
+                g2_edge_set[i] = g2.edge_set[j];
+            }
+        }
+    }
+}
 
 int GED :: index_mapping(int index){
     int n = -1;
@@ -125,7 +246,7 @@ int GED :: get_edit_cost(){
     return cost;
 }
 
-void GED :: calculate_GED(){ 
+void GED :: calculate_GED(){
     priority_queue<Index> q;
     for(int i = 0 ; i < max_size ; i++){
         if(search_array[i]){
@@ -140,64 +261,21 @@ void GED :: calculate_GED(){
         Index index = q.top();
         q.pop();
         int n = index_mapping(index.index_id);
-        int a = *g1_v_set.find(g1.get_vertex_label(n));
-        int b = *g2_v_set.find(g2.get_vertex_label(index.index_id));
-        
-        if(n >= g1.get_v_size()){
-            g2_v_set.erase(index.index_id);
-        }else if(index.index_id >= g1.get_v_size()){
-            g1_v_set.erase(n);
-        }else{
-            g1_v_set.erase(n);
-            g2_v_set.erase(index.index_id);
-        }
-        // g1_v_set.erase(n);
-        // g2_v_set.erase(index.index_id);
-        // cout << "g1 : " << n << " | " << a << " " << "g2 : " << index.index_id << " | " << b << endl;
-        multiset<int> temp;
-        set_intersection(g1_v_set.begin(), g1_v_set.end(), g2_v_set.begin(), g2_v_set.end(), inserter(temp, temp.begin()));
-
-        int max = g1_v_set.size() > g2_v_set.size() ? g1_v_set.size() : g2_v_set.size();
-        int cost2 = max-temp.size();
-        // cout << cost2 << endl;
         if(index_array[max_size-1] != -1){
             if(min_cost == -1){
                 min_cost = index.cost;
-                // cout << min_cost << endl;
             }else{
                 if(min_cost >= index.cost){
                     min_cost = index.cost;
-                    // cout << min_cost << endl;
                 }
             }
         }
-        if(min_cost != -1 && min_cost <= index.cost + cost2){
-            // cout << index.cost << " " << cost2 << endl;
+        if(min_cost != -1 && min_cost <= index.cost){
             index_unmapping(index.index_id);
-
-            if(n >= g1.get_v_size()){
-                g2_v_set.insert(index.index_id);
-            }else if(index.index_id >= g1.get_v_size()){
-                g1_v_set.insert(n);
-            }else{
-                g1_v_set.insert(n);
-                g2_v_set.insert(index.index_id);
-            }
-
             return;
         }
         calculate_GED();
         index_unmapping(index.index_id);
-
-        if(n >= g1.get_v_size()){
-            g2_v_set.insert(index.index_id);
-        }else if(index.index_id >= g1.get_v_size()){
-            g1_v_set.insert(n);
-        }else{
-            g1_v_set.insert(n);
-            g2_v_set.insert(index.index_id);
-        }
-
     }
 }
 
@@ -205,7 +283,7 @@ int GED :: get_GED(){
     start = clock();
     calculate_GED();
     end = clock();
-    cout << "\nuse priority queue time : " << (double)(end - start) << "ms" << endl;
+    cout << "\nuse priority queue time : " << (double)(end - start) / CLOCKS_PER_SEC << "s" << endl;
     return min_cost;
 }
 

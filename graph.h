@@ -14,16 +14,16 @@ private:
     int * num_v_label;
     int v_size;
     int graph_num;
-    int * vertex_set;
-    int * edge_set;
-    int vertex_set_size;
-    int edge_set_size;
-    int * vertex_set_mapping;
-    int * edge_set_mapping;
     int start, end;
     multiset<int> v_set;
     multiset<int> e_set;
 public:
+    int vertex_set_size;
+    int edge_set_size;
+    int * vertex_set;
+    int * edge_set;
+    int * vertex_set_mapping;
+    int * edge_set_mapping;
     graph(){}
     graph(int v_size){
         this->v_size = v_size;
@@ -42,7 +42,6 @@ public:
     void print_graph_num();
     void DFS_use_recursion();
     void DFS_use_stack();
-    // int get_edit_cost(graph g);
     int get_v_size();
     int get_vertex_label(int vertex);
     int get_edge_label(int vertex1, int vertex2);
