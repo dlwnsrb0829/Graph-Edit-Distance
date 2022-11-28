@@ -3,6 +3,7 @@
         "iostream": "cpp",
         "ostream": "cpp",
         "new": "cpp",
-        "queue": "cpp"
+        "queue": "cpp",
+        "istream": "cpp"
     }
 }

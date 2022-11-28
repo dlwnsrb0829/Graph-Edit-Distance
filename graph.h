@@ -14,6 +14,12 @@ private:
     int * num_v_label;
     int v_size;
     int graph_num;
+    int * vertex_set;
+    int * edge_set;
+    int vertex_set_size;
+    int edge_set_size;
+    int * vertex_set_mapping;
+    int * edge_set_mapping;
     int start, end;
     multiset<int> v_set;
     multiset<int> e_set;
@@ -43,6 +49,7 @@ public:
     void test();
     void set_v_set(multiset<int> v_set);
     void set_e_set(multiset<int> e_set);
+    void set_graph_set(int * vertex_set, int * edge_set, int vertex_set_size, int edge_set_size, int * vertex_set_mapping, int * edge_set_mapping);
     multiset<int> get_v_set();
     multiset<int> get_e_set();
 
@@ -73,6 +80,15 @@ void graph :: set_v_set(multiset<int> v_set){
 
 void graph :: set_e_set(multiset<int> e_set){
     this->e_set = e_set;
+}
+
+void graph :: set_graph_set(int * vertex_set, int * edge_set, int vertex_set_size, int edge_set_size, int * vertex_set_mapping, int * edge_set_mapping){
+    this->vertex_set = vertex_set;
+    this->edge_set = edge_set;
+    this->vertex_set_size = vertex_set_size;
+    this->edge_set_size = edge_set_size;
+    this->vertex_set_mapping = vertex_set_mapping;
+    this->edge_set_mapping = edge_set_mapping;
 }
 
 // get graph
@@ -194,7 +210,20 @@ int graph :: get_edge_label(int vertex1, int vertex2){
 }
 
 void graph :: test(){
-    for(int i = 0 ; i < v_size ; i++){
-        cout << "label : " << i << ", num : " << num_v_label[i] << endl;
+    for(int i = 0 ; i < vertex_set_size ; i++){
+        cout << "i : " << i << ", mapping : " << vertex_set_mapping[i] << endl;
     }
+    cout << endl;
+    for(int i = 0 ; i < vertex_set_size ; i++){
+        cout << "i : " << i << ", num : " << vertex_set[i] << endl;
+    }
+    cout << endl;
+    for(int i = 0 ; i < edge_set_size ; i++){
+        cout << "i : " << i << ", mapping : " << edge_set_mapping[i] << endl;
+    }
+    cout << endl;
+    for(int i = 0 ; i < edge_set_size ; i++){
+        cout << "i : " << i << ", num : " << edge_set[i] << endl;
+    }
+    cout << endl;
 }
