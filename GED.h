@@ -125,7 +125,7 @@ int GED :: get_edit_cost(){
     return cost;
 }
 
-void GED :: calculate_GED(){
+void GED :: calculate_GED(){ 
     priority_queue<Index> q;
     for(int i = 0 ; i < max_size ; i++){
         if(search_array[i]){
