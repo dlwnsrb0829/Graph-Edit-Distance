@@ -17,7 +17,6 @@ struct Index
     }
 };
 
-
 class GED{
 private : 
     graph g1;
@@ -42,6 +41,12 @@ private :
     void print();
     void calculate_GED();
     void set_graph_set();
+    void set_vertex_decrease(int id1, int id2);
+    void set_vertex_increase(int id1, int id2);
+    void set_edge_decrease(int id1, int id2);
+    void set_edge_increase(int id1, int id2);
+    int get_vertex_unmapped_part_cost();
+    int get_edge_unmapped_part_cost();
 
 public :
     GED(graph g1, graph g2){
@@ -189,10 +194,6 @@ void GED :: set_graph_set(){
             }
         }
     }
-
-    for(int i = 0 ; i < edge_mapping_size ; i++){
-        cout << "mapping : " << edge_mapping[i] << ", num : " << g2_edge_set[i] << endl;
-    }
 }
 
 int GED :: index_mapping(int index){
@@ -259,6 +260,76 @@ int GED :: get_edit_cost(){
     return cost;
 }
 
+void GED :: set_vertex_increase(int id1, int id2){
+    for(int i = 0 ; i < vertex_mapping_size ; i++){
+        if(vertex_mapping[i] == g1.get_vertex_label(id1)){
+            g1_vertex_set[i]++;
+        }
+    }
+    for(int i = 0 ; i < vertex_mapping_size ; i++){
+        if(vertex_mapping[i] == g2.get_vertex_label(id2)){
+            g2_vertex_set[i]++;
+        }
+    }
+}
+
+void GED :: set_vertex_decrease(int id1, int id2){
+    for(int i = 0 ; i < vertex_mapping_size ; i++){
+        if(vertex_mapping[i] == g1.get_vertex_label(id1)){
+            g1_vertex_set[i]--;
+        }
+    }
+    for(int i = 0 ; i < vertex_mapping_size ; i++){
+        if(vertex_mapping[i] == g2.get_vertex_label(id2)){
+            g2_vertex_set[i]--;
+        }
+    }
+}
+
+void GED :: set_edge_increase(int id1, int id2){
+    for(int i = 0 ; i < edge_mapping_size ; i++){
+        if(edge_mapping[i] == g1.get_edge_label(id1, id2)){
+            g1_vertex_set[i]++;
+        }
+    }
+    for(int i = 0 ; i < edge_mapping_size ; i++){
+        if(edge_mapping[i] == g2.get_edge_label(id1, id2)){
+            g2_vertex_set[i]++;
+        }
+    }
+}
+
+void GED :: set_edge_decrease(int id1, int id2){
+    for(int i = 0 ; i < edge_mapping_size ; i++){
+        if(edge_mapping[i] == g1.get_edge_label(id1, id2)){
+            g1_edge_set[i]--;
+        }
+    }
+    for(int i = 0 ; i < edge_mapping_size ; i++){
+        if(edge_mapping[i] == g2.get_edge_label(id1, id2)){
+            g2_vertex_set[i]--;
+        }
+    }
+}
+
+int GED :: get_vertex_unmapped_part_cost(){
+    int cost = 0;
+    for(int i = 0 ; i < vertex_mapping_size ; i++){
+        int temp = g1_vertex_set[i] > g2_vertex_set[i] ? g1_vertex_set[i] - g2_vertex_set[i] : g2_vertex_set[i] - g1_vertex_set[i];
+        cost += temp;
+    }
+    return cost;
+}
+
+int GED :: get_edge_unmapped_part_cost(){
+    int cost = 0;
+    for(int i = 0 ; i < edge_mapping_size ; i++){
+        int temp = g1_edge_set[i] > g2_edge_set[i] ? g1_edge_set[i] - g2_edge_set[i] : g2_edge_set[i] - g1_edge_set[i];
+        cost += temp;
+    }
+    return cost;
+}
+
 void GED :: calculate_GED(){
     priority_queue<Index> q;
     for(int i = 0 ; i < max_size ; i++){
@@ -273,8 +344,24 @@ void GED :: calculate_GED(){
     while(!q.empty()){
         Index index = q.top();
         q.pop();
-        int n = index_mapping(index.index_id);
+        int id = index_mapping(index.index_id);
+
+        set_vertex_decrease(id, index.index_id);
+        set_edge_decrease(id, index.index_id);
+        int cost2 = get_vertex_unmapped_part_cost();
+        cost2 += get_edge_unmapped_part_cost();
+
+        if(min_cost != -1 && min_cost <= index.cost + cost2){
+            // cout << min_cost << endl;
+            // cout << index.cost << " " << cost2 << endl;
+            index_unmapping(index.index_id);
+            set_vertex_increase(id, index.index_id);
+            set_edge_increase(id, index.index_id);
+            return;
+        }
+
         if(index_array[max_size-1] != -1){
+            // cout << index.cost << " " << cost2 << endl;
             if(min_cost == -1){
                 min_cost = index.cost;
             }else{
@@ -283,12 +370,11 @@ void GED :: calculate_GED(){
                 }
             }
         }
-        if(min_cost != -1 && min_cost <= index.cost){
-            index_unmapping(index.index_id);
-            return;
-        }
+
         calculate_GED();
         index_unmapping(index.index_id);
+        set_vertex_increase(id, index.index_id);
+        set_edge_increase(id, index.index_id);
     }
 }
 
