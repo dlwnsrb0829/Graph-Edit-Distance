@@ -47,6 +47,7 @@ private :
     void set_edge_increase(int id1, int id2);
     int get_vertex_unmapped_part_cost();
     int get_edge_unmapped_part_cost();
+    void test();
 
 public :
     GED(graph g1, graph g2){
@@ -262,12 +263,12 @@ int GED :: get_edit_cost(){
 
 void GED :: set_vertex_increase(int id1, int id2){
     for(int i = 0 ; i < vertex_mapping_size ; i++){
-        if(vertex_mapping[i] == g1.get_vertex_label(id1)){
+        if(vertex_mapping[i] == g1.get_vertex_label(id1) && g1_vertex_set[i] != 0){
             g1_vertex_set[i]++;
         }
     }
     for(int i = 0 ; i < vertex_mapping_size ; i++){
-        if(vertex_mapping[i] == g2.get_vertex_label(id2)){
+        if(vertex_mapping[i] == g2.get_vertex_label(id2) && g2_vertex_set[i] != 0){
             g2_vertex_set[i]++;
         }
     }
@@ -275,12 +276,12 @@ void GED :: set_vertex_increase(int id1, int id2){
 
 void GED :: set_vertex_decrease(int id1, int id2){
     for(int i = 0 ; i < vertex_mapping_size ; i++){
-        if(vertex_mapping[i] == g1.get_vertex_label(id1)){
+        if(vertex_mapping[i] == g1.get_vertex_label(id1) && g1_vertex_set[i] != 0){
             g1_vertex_set[i]--;
         }
     }
     for(int i = 0 ; i < vertex_mapping_size ; i++){
-        if(vertex_mapping[i] == g2.get_vertex_label(id2)){
+        if(vertex_mapping[i] == g2.get_vertex_label(id2) && g2_vertex_set[i] != 0){
             g2_vertex_set[i]--;
         }
     }
@@ -288,26 +289,26 @@ void GED :: set_vertex_decrease(int id1, int id2){
 
 void GED :: set_edge_increase(int id1, int id2){
     for(int i = 0 ; i < edge_mapping_size ; i++){
-        if(edge_mapping[i] == g1.get_edge_label(id1, id2)){
-            g1_vertex_set[i]++;
+        if(edge_mapping[i] == g1.get_edge_label(id1, id2) && g1_edge_set[i] != 0){
+            g1_edge_set[i]++;
         }
     }
     for(int i = 0 ; i < edge_mapping_size ; i++){
-        if(edge_mapping[i] == g2.get_edge_label(id1, id2)){
-            g2_vertex_set[i]++;
+        if(edge_mapping[i] == g2.get_edge_label(id1, id2) && g2_edge_set[i] != 0){
+            g2_edge_set[i]++;
         }
     }
 }
 
 void GED :: set_edge_decrease(int id1, int id2){
     for(int i = 0 ; i < edge_mapping_size ; i++){
-        if(edge_mapping[i] == g1.get_edge_label(id1, id2)){
+        if(edge_mapping[i] == g1.get_edge_label(id1, id2) && g1_edge_set[i] != 0){
             g1_edge_set[i]--;
         }
     }
     for(int i = 0 ; i < edge_mapping_size ; i++){
-        if(edge_mapping[i] == g2.get_edge_label(id1, id2)){
-            g2_vertex_set[i]--;
+        if(edge_mapping[i] == g2.get_edge_label(id1, id2) && g2_edge_set[i] != 0){
+            g2_edge_set[i]--;
         }
     }
 }
@@ -345,15 +346,11 @@ void GED :: calculate_GED(){
         Index index = q.top();
         q.pop();
         int id = index_mapping(index.index_id);
-
         set_vertex_decrease(id, index.index_id);
         set_edge_decrease(id, index.index_id);
-        int cost2 = get_vertex_unmapped_part_cost();
-        cost2 += get_edge_unmapped_part_cost();
+        int cost2 = get_vertex_unmapped_part_cost() + get_edge_unmapped_part_cost();
 
         if(min_cost != -1 && min_cost <= index.cost + cost2){
-            // cout << min_cost << endl;
-            // cout << index.cost << " " << cost2 << endl;
             index_unmapping(index.index_id);
             set_vertex_increase(id, index.index_id);
             set_edge_increase(id, index.index_id);
@@ -361,12 +358,12 @@ void GED :: calculate_GED(){
         }
 
         if(index_array[max_size-1] != -1){
-            // cout << index.cost << " " << cost2 << endl;
             if(min_cost == -1){
                 min_cost = index.cost;
             }else{
                 if(min_cost >= index.cost){
                     min_cost = index.cost;
+                    // cout << min_cost << endl;
                 }
             }
         }
@@ -384,6 +381,17 @@ int GED :: get_GED(){
     end = clock();
     cout << "\nuse priority queue time : " << (double)(end - start) / CLOCKS_PER_SEC << "s" << endl;
     return min_cost;
+}
+
+void GED :: test(){
+    for(int i = 0 ; i < vertex_mapping_size ; i++){
+        cout << g1_vertex_set[i] << " ";
+    }
+    cout << endl;
+    for(int i = 0 ; i < vertex_mapping_size ; i++){
+        cout << g2_vertex_set[i] << " ";
+    }
+    cout << endl;
 }
 
 // void GED :: calculate_GED(){
