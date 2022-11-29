@@ -150,11 +150,20 @@ void GED :: set_graph_set(){
     g1_edge_set = new int[edge_mapping_size];
     g2_vertex_set = new int[vertex_mapping_size];
     g2_edge_set = new int[edge_mapping_size];
+    vertex_mapping = new int[vertex_mapping_size];
+    edge_mapping = new int[edge_mapping_size];
 
     memset(g1_vertex_set, 0, sizeof(int) * vertex_mapping_size);
     memset(g2_vertex_set, 0, sizeof(int) * vertex_mapping_size);
     memset(g1_edge_set, 0, sizeof(int) * edge_mapping_size);
     memset(g2_edge_set, 0, sizeof(int) * edge_mapping_size);
+
+    for(int i = 0 ; i < vertex_mapping_size ; i++){
+        vertex_mapping[i] = vertex_mapping_vector_temp[i];
+    }
+    for(int i = 0 ; i < edge_mapping_size ; i++){
+        edge_mapping[i] = edge_mapping_vector_temp[i];
+    }
 
     for(int i = 0 ; i < vertex_mapping_size ; i++){
         for(int j = 0 ; j < g1.vertex_set_size ; j++){
@@ -179,6 +188,10 @@ void GED :: set_graph_set(){
                 g2_edge_set[i] = g2.edge_set[j];
             }
         }
+    }
+
+    for(int i = 0 ; i < edge_mapping_size ; i++){
+        cout << "mapping : " << edge_mapping[i] << ", num : " << g2_edge_set[i] << endl;
     }
 }
 
