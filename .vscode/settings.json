@@ -4,6 +4,8 @@
         "ostream": "cpp",
         "new": "cpp",
         "queue": "cpp",
-        "istream": "cpp"
+        "istream": "cpp",
+        "array": "cpp",
+        "string_view": "cpp"
     }
 }

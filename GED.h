@@ -34,6 +34,7 @@ private :
     int * edge_mapping;
     int vertex_mapping_size;
     int edge_mapping_size;
+    int * GED_mapping;
     int index_mapping(int index);
     int index_unmapping(int index);
     bool is_full_mapping();
@@ -58,6 +59,7 @@ public :
         memset(search_array, true, sizeof(bool) * max_size);
         index_array = new int[max_size];
         memset(index_array, -1, sizeof(int) * max_size);
+        GED_mapping = new int[max_size];
         min_cost = -1;
         set_graph_set();
     }
@@ -266,8 +268,6 @@ void GED :: set_vertex_increase(int id1, int id2){
         if(vertex_mapping[i] == g1.get_vertex_label(id1) && g1_vertex_set[i] != 0){
             g1_vertex_set[i]++;
         }
-    }
-    for(int i = 0 ; i < vertex_mapping_size ; i++){
         if(vertex_mapping[i] == g2.get_vertex_label(id2) && g2_vertex_set[i] != 0){
             g2_vertex_set[i]++;
         }
@@ -279,8 +279,6 @@ void GED :: set_vertex_decrease(int id1, int id2){
         if(vertex_mapping[i] == g1.get_vertex_label(id1) && g1_vertex_set[i] != 0){
             g1_vertex_set[i]--;
         }
-    }
-    for(int i = 0 ; i < vertex_mapping_size ; i++){
         if(vertex_mapping[i] == g2.get_vertex_label(id2) && g2_vertex_set[i] != 0){
             g2_vertex_set[i]--;
         }
@@ -292,8 +290,6 @@ void GED :: set_edge_increase(int id1, int id2){
         if(edge_mapping[i] == g1.get_edge_label(id1, id2) && g1_edge_set[i] != 0){
             g1_edge_set[i]++;
         }
-    }
-    for(int i = 0 ; i < edge_mapping_size ; i++){
         if(edge_mapping[i] == g2.get_edge_label(id1, id2) && g2_edge_set[i] != 0){
             g2_edge_set[i]++;
         }
@@ -305,8 +301,6 @@ void GED :: set_edge_decrease(int id1, int id2){
         if(edge_mapping[i] == g1.get_edge_label(id1, id2) && g1_edge_set[i] != 0){
             g1_edge_set[i]--;
         }
-    }
-    for(int i = 0 ; i < edge_mapping_size ; i++){
         if(edge_mapping[i] == g2.get_edge_label(id1, id2) && g2_edge_set[i] != 0){
             g2_edge_set[i]--;
         }
@@ -363,7 +357,7 @@ void GED :: calculate_GED(){
             }else{
                 if(min_cost >= index.cost){
                     min_cost = index.cost;
-                    // cout << min_cost << endl;
+                    copy(&index_array[0], &index_array[max_size], &GED_mapping[0]);
                 }
             }
         }
@@ -379,7 +373,12 @@ int GED :: get_GED(){
     start = clock();
     calculate_GED();
     end = clock();
-    cout << "\nuse priority queue time : " << (double)(end - start) / CLOCKS_PER_SEC << "s" << endl;
+    cout << "mapping" << endl;
+    for(int i = 0 ; i < max_size ; i++){
+        cout << i << " - " << GED_mapping[i] << endl;
+    }
+    cout << "time : " << (double)(end - start) / CLOCKS_PER_SEC << "s" << endl;
+    cout << "GED : " << min_cost << endl;
     return min_cost;
 }
 
