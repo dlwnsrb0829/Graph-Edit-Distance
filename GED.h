@@ -334,10 +334,13 @@ void GED :: calculate_GED(){
             set_edge_decrease(j, i); // 이거 한 테이블 따로 index에 저장해놓으면 아래서 계산 안해도 되는거 아님?
             int cost2 = get_vertex_unmapped_part_cost() + get_edge_unmapped_part_cost();
             int edit_cost = get_edit_cost();
-            Index index = Index(i, edit_cost + cost2);
             index_unmapping(i);
             set_vertex_increase(j, i);
             set_edge_increase(j, i);
+            if(cost2 + edit_cost >= 5){
+                continue;
+            }
+            Index index = Index(i, edit_cost + cost2);
             q.push(index);
         }
     }
@@ -347,7 +350,7 @@ void GED :: calculate_GED(){
         int id = index_mapping(index.index_id);
         set_vertex_decrease(id, index.index_id);
         set_edge_decrease(id, index.index_id);
-        //int cost2 = get_vertex_unmapped_part_cost() + get_edge_unmapped_part_cost();
+        // int cost2 = get_vertex_unmapped_part_cost() + get_edge_unmapped_part_cost();
 
         if(min_cost != -1 && min_cost <= index.cost){
             index_unmapping(index.index_id);
@@ -359,6 +362,7 @@ void GED :: calculate_GED(){
         if(index_array[max_size-1] != -1){
             if(min_cost == -1){
                 min_cost = index.cost;
+                copy(&index_array[0], &index_array[max_size], &GED_mapping[0]);
             }else{
                 if(min_cost >= index.cost){
                     min_cost = index.cost;
@@ -378,12 +382,16 @@ int GED :: get_GED(){
     start = clock();
     calculate_GED();
     end = clock();
-    cout << "mapping" << endl;
-    for(int i = 0 ; i < max_size ; i++){
-        cout << i << " - " << GED_mapping[i] << endl;
+    if(min_cost == -1){
+        cout << "GED over 5" << endl;
+    }else{
+        cout << "mapping" << endl;
+        for(int i = 0 ; i < max_size ; i++){
+            cout << i << " - " << GED_mapping[i] << endl;
+        }
+        cout << "time : " << (double)(end - start) / CLOCKS_PER_SEC << "s" << endl;
+        cout << "GED : " << min_cost << endl;
     }
-    cout << "time : " << (double)(end - start) / CLOCKS_PER_SEC << "s" << endl;
-    cout << "GED : " << min_cost << endl;
     return min_cost;
 }
 
