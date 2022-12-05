@@ -329,10 +329,15 @@ void GED :: calculate_GED(){
     priority_queue<Index> q;
     for(int i = 0 ; i < max_size ; i++){
         if(search_array[i]){
-            index_mapping(i);
+            int j = index_mapping(i); // 이거 했을떄 테이블이랑
+            set_vertex_decrease(j, i); // 이거 
+            set_edge_decrease(j, i); // 이거 한 테이블 따로 index에 저장해놓으면 아래서 계산 안해도 되는거 아님?
+            int cost2 = get_vertex_unmapped_part_cost() + get_edge_unmapped_part_cost();
             int edit_cost = get_edit_cost();
-            Index index = Index(i, edit_cost);
+            Index index = Index(i, edit_cost + cost2);
             index_unmapping(i);
+            set_vertex_increase(j, i);
+            set_edge_increase(j, i);
             q.push(index);
         }
     }
@@ -342,9 +347,9 @@ void GED :: calculate_GED(){
         int id = index_mapping(index.index_id);
         set_vertex_decrease(id, index.index_id);
         set_edge_decrease(id, index.index_id);
-        int cost2 = get_vertex_unmapped_part_cost() + get_edge_unmapped_part_cost();
+        //int cost2 = get_vertex_unmapped_part_cost() + get_edge_unmapped_part_cost();
 
-        if(min_cost != -1 && min_cost <= index.cost + cost2){
+        if(min_cost != -1 && min_cost <= index.cost){
             index_unmapping(index.index_id);
             set_vertex_increase(id, index.index_id);
             set_edge_increase(id, index.index_id);
